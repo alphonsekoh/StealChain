@@ -1,26 +1,29 @@
 # anti-theft-alarm
 Anti theft alarm system coded in Arduino
 ---
+# chatbot
+A simple terminal chatbot coded in C
+---
 ### Project set up steps:
-1. clone project:  
-```git clone https://github.com/hanyi97/data-analysis-resale-hdb.git```
+1. Clone project  
+```git clone https://github.com/hanyi97/chatbot.git```
 
-2. checkout remote develop branch:  
-```git checkout origin/develop```
+1. Checkout main branch  
+```git checkout main```
 
-3. create and checkout feature branch:  
+1. Create and checkout feature branch  
 ```git checkout -b feature/<featurename>```
 
-4. push your feature branch to GitHub:  
+4. Push your feature branch to GitHub  
 ```git push -u origin feature/<featurename>```
 
 ### Basic workflow:
-1. Create and checkout new feature branch  
-```git checkout -b feature/<featurename>```
+1. Checkout your feature branch  
+```git checkout feature/<featurename>```
 
-2. Code and test your feature  
+1. Code and test your feature  
 
-3. Add your changes to the feature branch (best practice to add the files that you modified only)  
+2. Add your changes to the feature branch (best practice to add the files that you modified only)  
 ```git add <file name>```
 
 4. Commit your changes  
@@ -31,13 +34,32 @@ or
 5. Push your changes to Github  
 ```git push```
 
-### Once the feature is completed, merge it to develop branch:  
-1. Checkout develop branch  
-```git checkout develop```  
-2. Merge your feature branch to develop branch  
+### Get updates from main branch to your own branch:
+1. Check out main branch  
+```git checkout main```
+
+2. Pull updates from remote main branch to local main branch    
+```git pull```
+
+3. Change back to feature branch  
+```git checkout <featurename>```
+
+4. Merge main branch code to feature branch  
+```git merge main```
+
+### Once the feature is completed, merge it to main branch:  
+You can create a pull request in Github to merge your branch to main branch  
+
+#### OR
+1. Checkout main branch  
+```git checkout main```  
+
+2. Merge your feature branch to main branch  
 ```git merge <featurename>```  
+
 3. Delete local feature branch   
 ```git branch -d <featurename>```  
+
 4. Delete remote feature branch  
 ```git push origin --delete <featurename>```  
 
