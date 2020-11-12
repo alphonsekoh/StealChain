@@ -1,9 +1,6 @@
 # anti-theft-alarm
 Anti theft alarm system coded in Arduino
 ---
-# chatbot
-A simple terminal chatbot coded in C
----
 ### Project set up steps:
 1. Clone project  
 ```git clone https://github.com/hanyi97/chatbot.git```
