@@ -1,4 +1,4 @@
-# anti-theft-alarm
+# Anti Theft Alarm
 Anti theft alarm system coded in Arduino
 ---
 ### Project set up steps:
