@@ -3,7 +3,7 @@ Anti theft alarm system coded in Arduino
 ---
 ### Project set up steps:
 1. Clone project  
-```git clone https://github.com/hanyi97/chatbot.git```
+```git clone https://github.com/hanyi97/anti-theft-alarm.git```
 
 1. Checkout main branch  
 ```git checkout main```
