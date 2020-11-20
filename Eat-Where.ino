@@ -4,6 +4,7 @@
 
 #define STALL_YPOS 30
 #define PLACE_YPOS 25
+#define WHERE_TO_EAT_TXT "Where to eat?"
 
 TinyScreen display = TinyScreen(TinyScreenDefault);
 
@@ -34,8 +35,7 @@ void setup() {
   display.setFlip(true);
   display.setFont(liberationSans_10ptFontInfo);
   display.fontColor(TS_8b_White, TS_8b_Black);
-  display.setCursor(5, PLACE_YPOS);
-  display.print("Where to eat?");
+  centerText(WHERE_TO_EAT_TXT, PLACE_YPOS);
   displayMenu();
 }
 
@@ -66,14 +66,14 @@ void choosePlace()
     
     randIndex = random(5);
     chosen_place = canteens[(int)randIndex];
-    display.clearWindow(5, PLACE_YPOS, 96, 20);
-    display.setCursor(5, 15);
     display.fontColor(TS_8b_Green, TS_8b_Black);
-    display.print((String)"[" + chosen_place + "]");
+    centerText(chosen_place, PLACE_YPOS);
+    delay(800);
+    display.clearWindow(0, PLACE_YPOS, 96, 20);
+    centerText(chosen_place, 15);
     
-    display.setCursor(5, 30);
     display.fontColor(TS_8b_White, TS_8b_Black);
-    display.print("What to eat?");
+    centerText("What to eat?", 30);
     
     choose_place = 1;
     display.clearWindow(0, 0, 96, 11);
@@ -86,38 +86,37 @@ void chooseStall()
   if (display.getButtons(TSButtonUpperLeft)) 
   {
     display.setFont(liberationSans_10ptFontInfo);
-    display.clearWindow(5, STALL_YPOS, 96, 20);
-    display.setCursor(5, STALL_YPOS);
+    display.clearWindow(0, STALL_YPOS, 96, 15);
     switch ((int)randIndex)
     {
       case 0:
       {
         displayRandom(5, north_canteen, STALL_YPOS);
-        display.print(north_canteen[random(5)]);
+        centerText(north_canteen[random(5)], STALL_YPOS);
       }
       break;
       case 1:
       {
         displayRandom(8, south_canteen, STALL_YPOS);
-        display.print(south_canteen[random(8)]);
+        centerText(south_canteen[random(8)], STALL_YPOS);
       }
       break;
       case 2:
       {
         displayRandom(11, koufu, STALL_YPOS);
-        display.print(koufu[random(11)]);
+        centerText(koufu[random(11)], STALL_YPOS);
       }
       break;
       case 3:
       {
         displayRandom(7, foogle, STALL_YPOS);
-        display.print(foogle[random(7)]);
+        centerText(foogle[random(7)], STALL_YPOS);
       }
       break;
       case 4:
       {
         displayRandom(3, food_connect, STALL_YPOS);
-        display.print(food_connect[random(3)]);
+        centerText(food_connect[random(3)], STALL_YPOS);
       }
       break;
     }
@@ -139,12 +138,11 @@ void displayRandom(int num, char ** list, int height)
   for (int i = 0; i < 10; i++)
   {
     delay(200);
-    display.clearWindow(5, height, 96, 20);
-    display.setCursor(5, height);
-    display.print(list[random(num)]);
+    display.clearWindow(0, height, 96, 15);
+    centerText(list[random(num)], height);
   }
-  display.clearWindow(5, height, 96, 20);
-  display.setCursor(5, height);
+  display.clearWindow(0, height, 96, 15);
+//  display.setCursor(5, height);
 }
 
 void backButtonLoop()
@@ -154,9 +152,22 @@ void backButtonLoop()
     delay(400);
     display.setFont(liberationSans_10ptFontInfo);
     display.clearWindow(0, 0, 96, 44);
-    display.setCursor(5, 25);
-    display.print("Where to eat?");
+    centerText(WHERE_TO_EAT_TXT, 25);
     displayMenu();
     choose_place = 0;
   }
+}
+
+void centerText(char *txt, int ypos)
+{
+  int width=display.getPrintWidth(txt);
+  if(width <= 96)
+  {
+    display.setCursor(48-(width/2), ypos);
+  }
+  else
+  {
+    display.setCursor(0, ypos);
+  }
+  display.print(txt);
 }
