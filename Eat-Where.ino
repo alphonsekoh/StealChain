@@ -9,11 +9,11 @@
 TinyScreen display = TinyScreen(TinyScreenDefault);
 
 char *canteens[5] = {"North Canteen", "South Canteen", "Koufu", "Foogle Hub", "Food Connect"};
-char *north_canteen[5] = {"Western Cuisine", "Pasta (Halal)", "Economical Rice", "Thai Cuisine", "Indo Delight (Muslim Operated)"};
-char *south_canteen[8] = {"Muslim Food (Muslim Operated)", "Vegetarian", "Chicken Rice", "Indian Food", "Japanese Food", "Ban Mian & Fish Soup", "Economy Rice (Muslim Operated)", "Western Food (Muslim Operated)"};
-char *koufu[11] = {"Fish Ball Noodle", "Yong Tau Foo", "Thai Cuisine (Muslim Operated)", "Korean Cuisine", "Nasi Padang (Muslim Operated)", "Curry Rice", "Western", "Japanese Cuisine", "Vegetarian", "Turkish Kebab", "Mala Hot Pot"};
-char *foogle[7] = {"Fusion Food", "Ayam Penyet (Muslim Operated)", "Japanese/Korean", "Thai Cuisine", "Chicken Rice (Halal)", "Economy Rice & Mala Hotpot", "Indian Muslim Cuisine (Muslim Operated)"};
-char *food_connect[3] = {"Manna (Western Cuisine/Pastry/Ice-cream) (Halal)", "Subway (Sandwiches/Salad) (Halal)", "International Mart (Mala Hot Pot/Lok Lok/Salad/Waffles)"};
+char *north_canteen[5] = {"Western Cuisine", "Pasta", "Economical Rice", "Thai Cuisine", "Indo Delight"};
+char *south_canteen[8] = {"Muslim Food", "Vegetarian", "Chicken Rice", "Indian Food", "Japanese Food", "Ban Mian", "Economy Rice", "Western Food"};
+char *koufu[11] = {"Fishball Noodle", "Yong Tau Foo", "Thai Cuisine", "Korean Cuisine", "Nasi Padang", "Curry Rice", "Western", "Japanese Cuisine", "Vegetarian", "Turkish Kebab", "Mala Hotpot"};
+char *foogle[7] = {"Fusion Food", "Ayam Penyet", "Japanese/Korean", "Thai Cuisine", "Chicken Rice", "Mala Hotpot", "Indian Muslim"};
+char *food_connect[3] = {"Manna", "Subway", "International Mart"};
 
 int choose_place = 0;
 char *chosen_place;
@@ -161,6 +161,7 @@ void backButtonLoop()
 void centerText(char *txt, int ypos)
 {
   int width=display.getPrintWidth(txt);
+  SerialMonitorInterface.println(width);
   if(width <= 96)
   {
     display.setCursor(48-(width/2), ypos);
