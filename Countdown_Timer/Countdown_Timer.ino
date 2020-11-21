@@ -33,6 +33,7 @@ unsigned long time_now = 0;
 bool rewriteTime = true;
 bool isPaused = false;
 bool isInSettings = false;
+bool timeIsZero = false;
 
 uint8_t currentDisplayState = displayStateHome;
 
@@ -63,7 +64,7 @@ void setup()
   displayMenu();
   hours = 00;
   minutes = 00;
-  seconds = 12;
+  seconds = 35;
 }
 
 //void updateMainDisplay()
@@ -82,22 +83,22 @@ void updateTimeDisplay()
 
   display.clearWindow(0, 48, 64, 11);
   display.setCursor(0, 48);
+  display.setFont(liberationSans_8ptFontInfo);
+  display.fontColor(TS_8b_White, TS_8b_Black);
   display.print("< Pause");
 
   isPaused = false;
 
+  int internalSeconds = 0;
+  int secondsToDisplay = 0;
+  int minutesToDisplay = 0;
+  int hoursToDisplay = 0;
+
   while (totalSeconds >= 0)
   {
-    int internalSeconds = totalSeconds;
-    int secondsToDisplay = 0;
-    int minutesToDisplay = 0;
-    int hoursToDisplay = 0;
-      
-    if(millis() >= time_now + timeInterval)
-    {
-      time_now += timeInterval;
-  
-      if (internalSeconds >= 3600)
+    internalSeconds = totalSeconds;
+
+    if (internalSeconds >= 3600)
       {
         hoursToDisplay = internalSeconds / 3600;
         internalSeconds -= hoursToDisplay * 3600;
@@ -109,10 +110,12 @@ void updateTimeDisplay()
       }
   
       secondsToDisplay = internalSeconds;
-
-      totalSeconds--;
-    }
-
+    
+    if(millis() >= time_now + timeInterval)
+    {
+//      time_now += timeInterval;
+      time_now = millis();
+      
       display.setFont(clockFont);
       displayX = 0;
       display.setCursor(displayX, timeY);
@@ -135,15 +138,20 @@ void updateTimeDisplay()
       if (secondsToDisplay < 10)
         display.print('0');
       display.print(secondsToDisplay);
+
+      totalSeconds--;
+    }
    
     //Run other code
 
     if (display.getButtons(TSButtonUpperLeft))
     {
+      //Reset invoked.
       totalSeconds = 0;
       hours = 0;
       minutes = 0;
       seconds = 0;
+      timeIsZero = true;
     }
     else if (display.getButtons(TSButtonLowerLeft))
     {
@@ -155,8 +163,8 @@ void updateTimeDisplay()
       display.setFont(liberationSans_8ptFontInfo);
       display.fontColor(TS_8b_White, TS_8b_Black);
       display.setCursor(0, 48);
-      delay(50);
       display.print("< Continue");
+      delay(2000);
       break;
     }
     else if (display.getButtons(TSButtonUpperRight))
@@ -172,6 +180,8 @@ void updateTimeDisplay()
   }
   if (totalSeconds <= 0)
   {
+    display.clearWindow(0, 48, 64, 11);
+    
     display.setFont(clockFont);
     displayX = 0;
     display.setCursor(displayX, timeY);
@@ -198,6 +208,9 @@ void updateTimeDisplay()
 
 void adjustTimer()
 {
+  //Remove pause/continue button from Display
+  display.clearWindow(0, 48, 64, 11);
+  
   char displayX;
 
   display.clearWindow(0, 0, 96, 11);
@@ -416,13 +429,14 @@ void adjustTimer()
 
 void loop()
 {
-  if (!isPaused || !isInSettings)
+  if (!isPaused && !isInSettings)
   {
     updateTimeDisplay();
   }
   if (display.getButtons(TSButtonLowerLeft) && isPaused)
   {
     //Continue button is triggered
+    delay(200);
     display.clearWindow(0, 48, 64, 11);
     display.setCursor(0, 48);
     display.print("< Pause");
@@ -441,24 +455,52 @@ void loop()
     minutes = 0;
     seconds = 0;
     totalSeconds = 0;
+
+    char displayX;
+
+     display.setFont(clockFont);
+      display.fontColor(defaultFontColor, defaultFontBG);
+      displayX = 0;
+      display.setCursor(displayX, timeY);
+      if (hours < 10)
+        display.print('0');
+      display.print(hours);
+      display.write(':');
+
+      display.setFont(clockFont);
+      display.fontColor(defaultFontColor, defaultFontBG);
+      displayX = 14 + 14 - 1;
+      display.setCursor(displayX, timeY);
+      if (minutes < 10)
+        display.print('0');
+      display.print(minutes);
+      display.write(':');
+
+      display.setFont(clockFont);
+      display.fontColor(defaultFontColor, defaultFontBG);
+      displayX = 14 + 14 + 14 + 14 - 2;
+      display.setCursor(displayX, timeY);
+      if (seconds < 10)
+        display.print('0');
+      display.print(seconds);
   }
 }
 
-void listenForButtonPress()
-{
-  if (display.getButtons(TSButtonLowerLeft))
-  {
-    //Toggle start/stop
-  }
-  else if (display.getButtons(TSButtonUpperLeft))
-  {
-    //Reset timer..
-    hours = 0;
-    minutes = 0;
-    seconds = 0;
-    totalSeconds = 0;
-  }
-}
+//void listenForButtonPress()
+//{
+//  if (display.getButtons(TSButtonLowerLeft))
+//  {
+//    //Toggle start/stop
+//  }
+//  else if (display.getButtons(TSButtonUpperLeft))
+//  {
+//    //Reset timer..
+//    hours = 0;
+//    minutes = 0;
+//    seconds = 0;
+//    totalSeconds = 0;
+//  }
+//}
 
 void displayMenu()
 {
