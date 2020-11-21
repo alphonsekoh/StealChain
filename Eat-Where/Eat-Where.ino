@@ -76,7 +76,8 @@ void choosePlace()
     chosen_place = canteens[(int)randIndex];
     display.fontColor(TS_8b_Green, TS_8b_Black);
     centerText(chosen_place, PLACE_YPOS);
-    delay(800);
+    drawBorder();
+    delay(600);
     display.clearWindow(0, PLACE_YPOS, 96, 20);
     centerText(chosen_place, 15);
     
@@ -138,6 +139,7 @@ void chooseStall()
       }
       break;
     }
+    drawBorder();
   }
 }
 
@@ -211,4 +213,54 @@ void centerText(char *txt, int ypos)
     display.setCursor(0, ypos);
   }
   display.print(txt);
+}
+
+/**
+ * 
+ * Draw an animated border starting from top left
+ * and clears the border after completing a round
+*/
+void drawBorder()
+{
+  // Draw top border
+  for(int i=1; i<=96; i++)
+  {
+    display.drawLine(0,0, i, 0, TS_8b_Green);
+  }
+  // Draw right border
+  for(int i=1; i<=64; i++)
+  {
+    display.drawLine(96,0, 96, i, TS_8b_Green);
+  }
+  // Draw bottom border
+  for(int i=96; i>=0; i--)
+  {
+    display.drawLine(96,64, i, 64, TS_8b_Green);
+  }
+  // Draw left border
+  for(int i=64; i>=0; i--)
+  {
+    display.drawLine(0,64, 0, i, TS_8b_Green);
+  }
+
+  // Clear top border
+  for(int i=1; i<=96; i++)
+  {
+    display.drawLine(0,0, i, 0, TS_8b_Black);
+  }
+  // Clear right border
+  for(int i=1; i<=64; i++)
+  {
+    display.drawLine(96,0, 96, i, TS_8b_Black);
+  }
+  // Clear bottom border
+  for(int i=96; i>=0; i--)
+  {
+    display.drawLine(96,64, i, 64, TS_8b_Black);
+  }
+  // Clear left border
+  for(int i=64; i>=0; i--)
+  {
+    display.drawLine(0,64, 0, i, TS_8b_Black);
+  }
 }
