@@ -71,7 +71,7 @@ void choosePlace()
   {
     display.setFont(liberationSans_10ptFontInfo);
     displayRandom(5, canteens, PLACE_YPOS);
-    
+    delay(200);
     randIndex = random(5);
     chosen_place = canteens[(int)randIndex];
     display.fontColor(TS_8b_Green, TS_8b_Black);
@@ -105,30 +105,35 @@ void chooseStall()
       case 0:
       {
         displayRandom(5, north_canteen, STALL_YPOS);
+        delay(200);
         centerText(north_canteen[random(5)], STALL_YPOS);
       }
       break;
       case 1:
       {
         displayRandom(8, south_canteen, STALL_YPOS);
+        delay(200);
         centerText(south_canteen[random(8)], STALL_YPOS);
       }
       break;
       case 2:
       {
         displayRandom(11, koufu, STALL_YPOS);
+        delay(200);
         centerText(koufu[random(11)], STALL_YPOS);
       }
       break;
       case 3:
       {
         displayRandom(7, foogle, STALL_YPOS);
+        delay(200);
         centerText(foogle[random(7)], STALL_YPOS);
       }
       break;
       case 4:
       {
         displayRandom(3, food_connect, STALL_YPOS);
+        delay(200);
         centerText(food_connect[random(3)], STALL_YPOS);
       }
       break;
@@ -159,10 +164,12 @@ void displayRandom(int num, char ** list, int height)
 {
   for (int i = 0; i < 10; i++)
   {
-    delay(200);
+    delay(100);
     display.clearWindow(0, height, 96, 15);
+    delay(100);
     centerText(list[random(num)], height);
   }
+  delay(100);
   display.clearWindow(0, height, 96, 15);
 }
 
