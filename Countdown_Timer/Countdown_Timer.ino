@@ -159,7 +159,7 @@ void updateTimeDisplay()
       display.fontColor(TS_8b_White, TS_8b_Black);
       display.setCursor(0, 48);
       display.print("< Continue");
-      delay(2000);
+      delay(200);
       break;
     }
     else if (display.getButtons(TSButtonUpperRight))
@@ -229,6 +229,8 @@ void adjustTimer()
   bool hoursSet = false;
   bool minsSet = false;
   bool secondsSet = false;
+
+  bool saveWordsPrinted = false;
 
   while (!display.getButtons(TSButtonUpperLeft))
   {
@@ -350,11 +352,16 @@ void adjustTimer()
 
       //handling the seconds starts here
       delay(200);
-      display.clearWindow(0, 0, 96, 11);
-      display.setFont(liberationSans_8ptFontInfo);
-      display.fontColor(TS_8b_White, TS_8b_Black);
-      display.setCursor(0, 0);
-      display.print("< Save");
+
+      if (!saveWordsPrinted)
+      {
+        display.clearWindow(0, 0, 70, 11);
+        display.setFont(liberationSans_8ptFontInfo);
+        display.fontColor(TS_8b_White, TS_8b_Black);
+        display.setCursor(0, 0);
+        display.print("< Save");
+        saveWordsPrinted = true;
+      }
 
       if (display.getButtons(TSButtonUpperLeft))
       {
@@ -419,6 +426,12 @@ void adjustTimer()
       time_now = millis();
       displayMenu();
       isInSettings = false;
+
+      //Print the start button
+      display.setFont(liberationSans_8ptFontInfo);
+      display.fontColor(TS_8b_White, TS_8b_Black);
+      display.setCursor(0, 48);
+      display.print("< Start");
       break;
     }
 //    delay(200);
@@ -427,23 +440,19 @@ void adjustTimer()
 
 void loop()
 {
-  if (!hasStarted && (seconds > 0 || minutes > 0 || hours > 0))
-  {
-    display.clearWindow(0, 48, 64, 11);
-    display.setFont(liberationSans_8ptFontInfo);
-    display.fontColor(TS_8b_White, TS_8b_Black);
-    display.setCursor(0, 48);
-    display.print("< Start");
-  }
+//  if (!hasStarted && (seconds > 0 || minutes > 0 || hours > 0))
+//  {
+//  
+//  }
   if (display.getButtons(TSButtonLowerLeft) && !hasStarted && (seconds > 0 || minutes > 0 || hours > 0))
   {
     //Timer has been set and user started it
     updateTimeDisplay();
   }
-  if (!isPaused && !isInSettings && hasStarted)
-  {
-    updateTimeDisplay();
-  }
+//  if (!isPaused && !isInSettings && hasStarted)
+//  {
+//    updateTimeDisplay();
+//  }
   else if (display.getButtons(TSButtonLowerLeft) && isPaused && hasStarted)
   {
     //Continue button is triggered
@@ -476,10 +485,18 @@ void loop()
   else if (!hasStarted)
   {
     displayClockAsIs();
-    if (totalSeconds == 0)
+    if (seconds < 1 && minutes < 1 && hours < 1)
     {
       //Dont show any pause/continue button.
       display.clearWindow(0, 48, 64, 11);
+    }
+    else
+    {
+//      display.clearWindow(0, 48, 64, 11);
+//      display.setFont(liberationSans_8ptFontInfo);
+//      display.fontColor(TS_8b_White, TS_8b_Black);
+//      display.setCursor(0, 48);
+//      display.print("< Start");
     }
   }
 }
@@ -517,6 +534,8 @@ void displayClockAsIs()
 
 void displayMenu()
 {
+  display.setFont(liberationSans_8ptFontInfo);
+  display.fontColor(TS_8b_White, TS_8b_Black);
   display.setCursor(0, 0);
   display.print("< Reset");
 //  display.setCursor(0, 48);
