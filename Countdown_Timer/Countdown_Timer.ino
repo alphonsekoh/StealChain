@@ -61,7 +61,7 @@ void setup()
   displayMenu();
   hours = 1;
   minutes = 00;
-  seconds = 40;
+  seconds = 50;
 }
 
 void updateMainDisplay()
@@ -74,11 +74,6 @@ void updateMainDisplay()
 
 void updateTimeDisplay()
   {
-//    int currentHour, currentMinute, currentSecond;
-//    currentHour = 0;
-//    currentMinute = 0;
-//    currentSecond = 0;
-
     totalSeconds = hours * 3600 + minutes * 60 + seconds;
     
     char displayX;
@@ -415,53 +410,6 @@ int countdown(int hours, int minutes, int seconds)
   uint8_t lastHourDisplayed = -1;
   uint8_t lastMinuteDisplayed = -1;
   uint8_t lastSecondDisplayed = -1;
-  
-//    while (hours > 0 || minutes > 0 || seconds > 0)
-//  {
-//    int internalSeconds = seconds;
-//    int hourToPrint = 0;
-//    int minToPrint = 0;
-//    int secToPrint = 0;
-//    if (seconds/3600 > 1)
-//    {
-//      hourToPrint = seconds/3600;
-//      
-//    }
-//    
-//    lastHourDisplayed = seconds/3600;
-//    lastMinuteDisplayed = seconds/60;
-//
-//      
-//    display.setFont(clockFont);
-//    lastHourDisplayed = 0;
-//    displayX = 0;
-//    display.setCursor(displayX, timeY);
-//    if (lastHourDisplayed < 10)
-//      display.print('0');
-//    display.print(lastHourDisplayed);
-//    display.write(':');
-//
-//    display.setFont(clockFont);
-//    lastMinuteDisplayed = minute;
-//    displayX = 14 + 14 - 1;
-//    display.setCursor(displayX, timeY);
-//    if (lastMinuteDisplayed < 10)
-//      display.print('0');
-//    display.print(lastMinuteDisplayed);
-//    display.write(':');
-//
-//    display.setFont(clockFont);
-//    lastSecondDisplayed = seconds;
-//    displayX = 14 + 14 + 14 + 14 - 2;
-//    display.setCursor(displayX, timeY);
-//    if (lastSecondDisplayed < 10)
-//      display.print('0');
-//    display.print(lastSecondDisplayed);
-//
-//    seconds--;
-//
-//    delay(1000);
-//  }
 }
 
     void loop()
