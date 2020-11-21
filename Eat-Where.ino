@@ -4,7 +4,8 @@
 
 #define STALL_YPOS 30
 #define PLACE_YPOS 25
-#define WHERE_TO_EAT_TXT "Where to eat?"
+#define EAT_WHERE "Where to eat?"
+#define EAT_WHAT "What to eat?"
 
 TinyScreen display = TinyScreen(TinyScreenDefault);
 
@@ -15,7 +16,7 @@ char *koufu[11] = {"Fishball Noodle", "Yong Tau Foo", "Thai Cuisine", "Korean Cu
 char *foogle[7] = {"Fusion Food", "Ayam Penyet", "Japanese/Korean", "Thai Cuisine", "Chicken Rice", "Mala Hotpot", "Indian Muslim"};
 char *food_connect[3] = {"Manna", "Subway", "International Mart"};
 
-int choose_place = 0;
+int choose_place = 0;  // 0 means haven't select place, 1 means selected place
 char *chosen_place;
 long randIndex;
 
@@ -27,20 +28,21 @@ long randIndex;
 #endif
 
 void setup() {
-  Wire.begin(); //initialize I2C before we can initialize TinyScreen
-  SerialMonitorInterface.begin(9600);
-  display.begin();
-  display.on();
-  display.setBrightness(10); //sets main current level, valid levels are 0-15
-  display.setFlip(true);
-  display.setFont(liberationSans_10ptFontInfo);
-  display.fontColor(TS_8b_White, TS_8b_Black);
-  centerText(WHERE_TO_EAT_TXT, PLACE_YPOS);
+  Wire.begin(); // Initialize I2C before we can initialize TinyScreen
+  SerialMonitorInterface.begin(9600); // Initialize serial monitor
+  display.begin(); // Initialize display
+  display.setBrightness(10); // Sets main current level, valid levels are 0-15
+  display.setFlip(true); // Flip screen
+  display.on(); // Turn on display
+  display.setFont(liberationSans_10ptFontInfo); // Set font size
+  display.fontColor(TS_8b_White, TS_8b_Black); // Set font color to white
+  centerText(EAT_WHERE, PLACE_YPOS); 
   displayMenu();
 }
 
 
-void loop() {
+void loop() 
+{
   if (choose_place == 0)
   {
     choosePlace();
@@ -56,7 +58,13 @@ void loop() {
   backButtonLoop();
 }
 
-
+/**
+ * 
+ * Randomnise and display chosen place to eat
+ * Set choose place to 1 to indicate that place
+ * has been chosen
+ * 
+*/
 void choosePlace()
 {
   if (display.getButtons(TSButtonUpperLeft)) 
@@ -73,14 +81,19 @@ void choosePlace()
     centerText(chosen_place, 15);
     
     display.fontColor(TS_8b_White, TS_8b_Black);
-    centerText("What to eat?", 30);
+    centerText(EAT_WHAT, 30);
     
     choose_place = 1;
     display.clearWindow(0, 0, 96, 11);
   }
 }
 
-
+/**
+ * 
+ * Randomnise and display chosen stall 
+ * based on selected place
+ * 
+*/
 void chooseStall()
 {
   if (display.getButtons(TSButtonUpperLeft)) 
@@ -123,7 +136,11 @@ void chooseStall()
   }
 }
 
-
+/**
+ * 
+ * Display default menu items
+ * 
+*/
 void displayMenu()
 { display.setFont(liberationSansNarrow_8ptFontInfo);
   display.setCursor(0, 0);
@@ -132,7 +149,12 @@ void displayMenu()
   display.print("< Back");
 }
 
-
+/**
+ * 
+ * Display text randomly for 10 times before 
+ * showing the chosen place or stall
+ * 
+*/
 void displayRandom(int num, char ** list, int height)
 {
   for (int i = 0; i < 10; i++)
@@ -142,9 +164,14 @@ void displayRandom(int num, char ** list, int height)
     centerText(list[random(num)], height);
   }
   display.clearWindow(0, height, 96, 15);
-//  display.setCursor(5, height);
 }
 
+/**
+ * 
+ * Check if lower left button is pressed
+ * and reset display to default screen
+ * 
+*/
 void backButtonLoop()
 {
   if (display.getButtons(TSButtonLowerLeft))
@@ -152,12 +179,18 @@ void backButtonLoop()
     delay(400);
     display.setFont(liberationSans_10ptFontInfo);
     display.clearWindow(0, 0, 96, 44);
-    centerText(WHERE_TO_EAT_TXT, 25);
+    centerText(EAT_WHERE, 25);
     displayMenu();
     choose_place = 0;
   }
 }
 
+/**
+ * 
+ * Calculate width based on text size
+ * and display text to center
+ * 
+*/
 void centerText(char *txt, int ypos)
 {
   int width=display.getPrintWidth(txt);
