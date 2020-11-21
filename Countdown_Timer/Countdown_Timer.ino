@@ -89,6 +89,16 @@ void updateTimeDisplay()
 
   while (totalSeconds >= 0)
   {
+    hasStarted = true;
+        if(millis() >= time_now + timeInterval)
+    {
+//      time_now += timeInterval;
+      time_now = millis();
+
+      totalSeconds--;
+    }
+        //Run other code
+        
     internalSeconds = totalSeconds;
 
     if (internalSeconds >= 3600)
@@ -128,16 +138,6 @@ void updateTimeDisplay()
       if (secondsToDisplay < 10)
         display.print('0');
       display.print(secondsToDisplay);
-    
-    if(millis() >= time_now + timeInterval)
-    {
-//      time_now += timeInterval;
-      time_now = millis();
-
-      totalSeconds--;
-    }
-   
-    //Run other code
 
     if (display.getButtons(TSButtonUpperLeft))
     {
