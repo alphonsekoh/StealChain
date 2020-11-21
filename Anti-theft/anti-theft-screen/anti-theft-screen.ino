@@ -1,12 +1,30 @@
 #include <Wire.h>
 #include <TinyScreen.h>
 #include "BMA250.h"
+#include <SPI.h>
+#include <STBLE.h>
 #define SerialMonitorInterface SerialUSB
+
+#ifndef BLE_DEBUG
+#define BLE_DEBUG true
+#endif
+
+#if defined (ARDUINO_ARCH_AVR)
+#define SerialMonitorInterface Serial
+#elif defined(ARDUINO_ARCH_SAMD)
+#endif
+
+uint8_t ble_rx_buffer[21];
+uint8_t ble_rx_buffer_len = 0;
+uint8_t ble_connection_state = false;
+#define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
 
 TinyScreen display = TinyScreen(TinyScreenDefault);
 char* anti_theft = "OFF";
 int blink = 0;
+char* value;
+int byphone = 0;
 
 
 void setup() {
@@ -17,16 +35,23 @@ void setup() {
   display.on();                               //Turns TinyScreen display on
   display.setBrightness(10);
 
-  
-  
-
+  SerialMonitorInterface.begin(9600);
+  BLEsetup();  
+  while (!SerialMonitorInterface);
   default_display();
   
 }
 
 void loop() {
 
-  
+  aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
+  if (ble_rx_buffer_len) {//Check if data is available
+    SerialMonitorInterface.print(ble_rx_buffer_len);
+    SerialMonitorInterface.print(" : ");
+    value = (char*)ble_rx_buffer;
+    SerialMonitorInterface.println((char*)ble_rx_buffer);
+    ble_rx_buffer_len = 0;//clear afer reading
+  }  
   
   
   if(blink)
@@ -34,6 +59,23 @@ void loop() {
      readUpdated();
      diffInReading();
      willItBlink();
+  }
+
+  if (strcmp(value, "ON") == 0 && byphone == 0)
+  {
+        delay(300);
+        anti_theft = "ON";
+        ON(value);
+        blink = 1;
+        byphone = 1;
+  }else if(strcmp(value, "OFF") == 0 && byphone == 1)
+  {
+        delay(300);
+        display.clearScreen();
+        anti_theft = "OFF";
+        OFF(value);
+        blink = 0;
+        byphone = 0;
   }
   
   // put your main code here, to run repeatedly:
