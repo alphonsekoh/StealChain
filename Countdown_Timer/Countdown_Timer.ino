@@ -7,9 +7,6 @@
 
 RTCZero RTCZ;
 
-int choose_place = 0;
-long randIndex;
-
 TinyScreen display = TinyScreen(TinyScreenDefault);
 
 const uint8_t displayStateHome = 0x01;
@@ -30,13 +27,10 @@ int totalSeconds = 0;
 int timeInterval = 1000;
 unsigned long time_now = 0;
 
-bool rewriteTime = true;
 bool isPaused = false;
 bool isInSettings = false;
 bool timeIsZero = false;
 bool hasStarted = false;
-
-uint8_t currentDisplayState = displayStateHome;
 
 // Make Serial Monitor compatible for all TinyCircuits processors
 #if defined(ARDUINO_ARCH_AVR)
