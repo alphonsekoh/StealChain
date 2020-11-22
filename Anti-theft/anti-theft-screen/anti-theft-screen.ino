@@ -25,6 +25,8 @@ char* anti_theft = "OFF";
 int blink = 0;
 char* value;
 int byphone = 0;
+int activated = 0;
+
 
 
 void setup() {
@@ -52,13 +54,29 @@ void loop() {
     SerialMonitorInterface.println((char*)ble_rx_buffer);
     ble_rx_buffer_len = 0;//clear afer reading
   }  
-  
-  
+   
   if(blink)
   {
      readUpdated();
      diffInReading();
-     willItBlink();
+     activated = willItBlink();
+     if (activated)
+     {
+        char* alert = "ALERT";
+        uint8_t sendBuffer[21];
+        uint8_t sendLength = 0;
+        for (int i = 0; i < strlen(alert); i++)
+        {
+          SerialMonitorInterface.println(sendBuffer[i]);
+          sendBuffer[i] = alert[i];
+          sendLength++;
+        }
+        sendBuffer[sendLength] = '\0';
+        lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, sendLength); 
+        //byphone = 0;
+        
+     }
+     //blinkAlert();
   }
 
   if (strcmp(value, "ON") == 0 && byphone == 0)
@@ -68,32 +86,45 @@ void loop() {
         ON(value);
         blink = 1;
         byphone = 1;
+        value = "";
+        
   }else if(strcmp(value, "OFF") == 0 && byphone == 1)
   {
+        SerialMonitorInterface.println(anti_theft);
         delay(300);
         display.clearScreen();
         anti_theft = "OFF";
         OFF(value);
         blink = 0;
+        stopBlink();
         byphone = 0;
+        value = "";
   }
   
   // put your main code here, to run repeatedly:
   switch (display.getButtons())
   {
     case TSButtonUpperLeft:
-      delay(300);
-      display.clearScreen();
+      
       if (strcmp(anti_theft, "OFF") == 0)
       {
+         
+        delay(300);
+        display.clearScreen();
         anti_theft = "ON";
+        SerialMonitorInterface.println(anti_theft);
         ON(anti_theft);
         blink = 1;
+        byphone = 1;
       }else
       {
+        delay(300);
+        display.clearScreen();
         anti_theft = "OFF";
         OFF(anti_theft);
         blink = 0;
+        stopBlink();
+        byphone = 0;
       }
       break;
       
@@ -103,6 +134,8 @@ void loop() {
         delay(300);
         display.clearScreen();
         blink = 0;
+        stopBlink();
+        byphone = 0;
         anti_theft = "OFF";
         default_display();
       }else
@@ -115,6 +148,8 @@ void loop() {
        delay(300);
        display.clearScreen();
        blink = 0;
+       stopBlink();
+       byphone = 0;
        anti_theft = "OFF";
        default_display();
        break;
@@ -123,6 +158,8 @@ void loop() {
        delay(300);
        display.clearScreen();
        blink = 0;
+       stopBlink();
+       byphone = 0;
        anti_theft = "OFF";
        default_display();
        break;

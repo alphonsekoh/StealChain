@@ -68,12 +68,26 @@ void diffInReading(){
     z3 = z - z2;
 }
 
+int startblink = 0;
 int willItBlink(){
-  if(x3>50 || x3<-50 || y3>50 || y3<-50){
-      blinkAlert();
+  if (startblink)
+  {
+    blinkAlert();
+    
+  }else
+  {
+    if(x3>50 || x3<-50 || y3>50 || y3<-50){
+        startblink = 1;
+        return 1;
      }
-  //delay(250);
   }
+  return 0;
+  //delay(250);
+}
+void stopBlink()
+{
+  startblink = 0;
+}
 
 
   
