@@ -13,6 +13,25 @@
 #include <Wire.h>
 #include <TinyScreen.h> //include TinyScreen library
 #include <TimeLib.h> //include the Arduino Time library
+#include <SPI.h>
+#include <STBLE.h>
+#include <stdio.h>
+#include "BMA250.h"
+
+
+/* For Anti theft alarm */
+#ifndef BLE_DEBUG
+#define BLE_DEBUG true
+#endif
+#if defined (ARDUINO_ARCH_AVR)
+#define SerialMonitorInterface Serial
+#elif defined(ARDUINO_ARCH_SAMD)
+#endif
+
+uint8_t ble_rx_buffer[21];
+uint8_t ble_rx_buffer_len = 0;
+uint8_t ble_connection_state = false;
+#define PIPE_UART_OVER_BTLE_UART_TX_TX 0
 
 // Make Serial Monitor compatible for all TinyCircuits processors
 #if defined(ARDUINO_ARCH_AVR)
@@ -41,7 +60,6 @@ void setup()
  
 void loop()
 {
-  
 
   readInput(); //Sets the font size & color of the buttons and also call the buttonLoop function
   switch(option)
