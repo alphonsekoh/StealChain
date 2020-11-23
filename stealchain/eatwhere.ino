@@ -20,19 +20,9 @@ int is_place_chosen = 0;  // 0 means haven't select place, 1 means selected plac
 char *chosen_place;
 long randIndex;
 
-// Make Serial Monitor compatible for all TinyCircuits processors
-//#if defined(ARDUINO_ARCH_AVR)
-//#define SerialMonitorInterface Serial
-//#elif defined(ARDUINO_ARCH_SAMD)
-//#define SerialMonitorInterface SerialUSB
-//#endif
-
 int eatWhere()
 {
-  display.setFont(liberationSans_10ptFontInfo); // Set font size
-  display.fontColor(TS_8b_White, TS_8b_Black); // Set font color to white
-  centerText(EAT_WHERE, PLACE_YPOS); 
-  displayMenu();
+  eatWhereSetup();
 
   while (!display.getButtons(TSButtonLowerLeft))
   {
@@ -43,13 +33,13 @@ int eatWhere()
   return 0;
 }
 
-//void eatWhereSetup() {
-//  display.setFont(liberationSans_10ptFontInfo); // Set font size
-//  display.fontColor(TS_8b_White, TS_8b_Black); // Set font color to white
-//  centerText(EAT_WHERE, PLACE_YPOS); 
-//  displayMenu();
-//  
-//}
+void eatWhereSetup() {
+  display.setFont(liberationSans_10ptFontInfo); // Set font size
+  display.fontColor(TS_8b_White, TS_8b_Black); // Set font color to white
+  centerText(EAT_WHERE, PLACE_YPOS); 
+  displayMenu();
+  
+}
 
 
 void eatWhereLoop() 
