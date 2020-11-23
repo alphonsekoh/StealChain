@@ -7,8 +7,6 @@
 #define EAT_WHERE "Where to eat?"
 #define EAT_WHAT "What to eat?"
 
-//TinyScreen display = TinyScreen(TinyScreenDefault);
-
 char *canteens[5] = {"North Canteen", "South Canteen", "Koufu", "Foogle Hub", "Food Connect"};
 char *north_canteen[5] = {"Western Cuisine", "Pasta", "Economical Rice", "Thai Cuisine", "Indo Delight"};
 char *south_canteen[8] = {"Muslim Food", "Vegetarian", "Chicken Rice", "Indian Food", "Japanese Food", "Ban Mian", "Economy Rice", "Western Food"};
@@ -17,6 +15,7 @@ char *foogle[7] = {"Fusion Food", "Ayam Penyet", "Japanese/Korean", "Thai Cuisin
 char *food_connect[3] = {"Manna", "Subway", "International Mart"};
 
 int is_place_chosen = 0;  // 0 means haven't select place, 1 means selected place
+int is_back = 1;
 char *chosen_place;
 long randIndex;
 
@@ -24,18 +23,30 @@ int eatWhere()
 {
   eatWhereSetup();
 
+  // Keep looping until lower left button is pressed
   while (!display.getButtons(TSButtonLowerLeft))
   {
     eatWhereLoop();
   }
+  
   delay(300);
-  is_place_chosen = 0;
-  return 0;
+  if(is_place_chosen)
+  {
+    display.clearScreen();
+    is_place_chosen = 0;
+    eatWhere();
+  }
+  else
+  {
+    is_place_chosen = 0;
+    return 0;
+  }
 }
 
 void eatWhereSetup() {
+  display.clearScreen();
   display.setFont(liberationSans_10ptFontInfo); // Set font size
-  display.fontColor(TS_8b_White, TS_8b_Black); // Set font color to white
+  display.fontColor(WHITE, BLACK); // Set font color to white
   centerText(EAT_WHERE, PLACE_YPOS); 
   displayMenu();
   
@@ -59,7 +70,6 @@ void eatWhereLoop()
       chooseStall();
     }
   }
-//  backButtonLoop();
 }
 
 /**
@@ -79,7 +89,7 @@ void choosePlace()
     delay(200);
     randIndex = random(5);
     chosen_place = canteens[(int)randIndex];
-    display.fontColor(TS_8b_Green, TS_8b_Black);
+    display.fontColor(GREEN, BLACK);
     centerText(chosen_place, PLACE_YPOS);
     drawBorder();
     delay(600);
@@ -91,11 +101,11 @@ void choosePlace()
     
     is_place_chosen = 1;
     display.clearWindow(0, 0, 96, 11);
-//    display.clearWindow(0,52, 96, 12);
-//    display.fontColor(YELLOW, BLACK);
-//    display.setFont(liberationSans_8ptFontInfo);
-//    display.setCursor(0, 48);
-//    display.print("< Back");
+    display.clearWindow(0,52, 96, 12);
+    display.fontColor(YELLOW, BLACK);
+    display.setFont(liberationSans_8ptFontInfo);
+    display.setCursor(0, 48);
+    display.print("< Back");
   }
 }
 
