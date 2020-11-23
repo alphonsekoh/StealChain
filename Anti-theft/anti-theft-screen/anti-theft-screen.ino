@@ -28,7 +28,7 @@ int byphone = 0;
 int activated = 0;
 
 
-//
+
 //void setup() {
 //  // put your setup code here, to run once:
 //  Wire.begin();
@@ -55,11 +55,11 @@ void Anti_TheftSetup()
 
   default_display();
 
-  anti_theft();
+  anti_theft_loop();
 }
 
 // Function for anti-theft
-void anti_theft()
+void anti_theft_loop()
 {
   //Receive value from the phone via bluetooth
   aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
