@@ -1,5 +1,3 @@
-int countdown()
-{
     uint8_t defaultFontColor = TS_8b_White;
     uint8_t defaultFontBG = TS_8b_Black;
     uint8_t inactiveFontColor = TS_8b_Gray;
@@ -21,6 +19,8 @@ int countdown()
 
     bool userHasNotLeftMyApp = true;
 
+int countdown()
+{
     display.setFont(liberationSans_8ptFontInfo);
     display.fontColor(TS_8b_White, TS_8b_Black);
     display.clearScreen();

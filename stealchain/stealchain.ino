@@ -32,7 +32,6 @@ uint8_t ble_rx_buffer[21];
 uint8_t ble_rx_buffer_len = 0;
 uint8_t ble_connection_state = false;
 #define PIPE_UART_OVER_BTLE_UART_TX_TX 0
-#include <CountDown.h>
 
 // Make Serial Monitor compatible for all TinyCircuits processors
 #if defined(ARDUINO_ARCH_AVR)
