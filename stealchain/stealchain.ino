@@ -66,6 +66,13 @@ void loop()
       delay(200); //delay 1 second
       break;
     }
+    case 1:
+    {
+      display.clearScreen();
+      option = countdown();
+      display.clearScreen();
+      break;
+    }
     case 2:
     {
       display.clearScreen();
@@ -88,6 +95,8 @@ void buttonLoop() {
   
   if (display.getButtons(TSButtonUpperLeft)) { //Test if a specific button is pressed, getButtons(TSRButtonLowerLeft|TSRButtonLowerRight) to test multiple buttons
     display.println("ok       "); //Spaces are used to cover the original displayed text
+    delay(300);
+    option = 1;
   } else {
     display.println("Timer");
 
