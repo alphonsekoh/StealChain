@@ -22,9 +22,9 @@
 int countdown()
 {
     display.setFont(liberationSans_8ptFontInfo);
-    display.fontColor(TS_8b_White, TS_8b_Black);
+    display.fontColor(YELLOW, TS_8b_Black);
     display.clearScreen();
-    display.setCursor(5, 25);
+//    display.setCursor(5, 25);
 
     displayDefaultMenu();
 
@@ -40,7 +40,7 @@ int countdown()
             //Continue button is triggered
             delay(200);
             display.clearWindow(0, 48, 64, 11);
-            display.setCursor(64, 48);
+            display.setCursor(56, 48);
             display.print("Pause >");
             updateTimeDisplay();
         }
@@ -192,6 +192,10 @@ int countdown()
                 isInSettings = true;
                 adjustTimer();
                 break;
+            }
+            else if (display.getButtons(TSButtonLowerLeft))
+            {
+              userHasNotLeftMyApp = false;
             }
         }
 
@@ -481,8 +485,8 @@ int countdown()
                 //Print the start button
                 display.setFont(liberationSans_8ptFontInfo);
                 display.fontColor(TS_8b_White, TS_8b_Black);
-                display.setCursor(0, 48);
-                display.print("< Start");
+                display.setCursor(56, 48);
+                display.print("Start >");
                 break;
             }
             //    delay(200);
@@ -523,11 +527,11 @@ int countdown()
     void displayDefaultMenu()
     {
         display.setFont(liberationSans_8ptFontInfo);
-        display.fontColor(TS_8b_White, TS_8b_Black);
+        display.fontColor(YELLOW, BLACK);
         display.setCursor(0, 0);
         display.print("< Reset");
-        //  display.setCursor(0, 48);
-        //  display.print("< Start/Stop");
+        display.setCursor(0, 55);
+        display.print("< Exit");
         display.setCursor(66, 0);
         display.print("Set >");
     }

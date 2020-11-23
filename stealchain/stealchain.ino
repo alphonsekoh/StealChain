@@ -89,7 +89,7 @@ void loop()
     case 1:
     {
       display.clearScreen();
-//      option = countdown();
+      option = countdown();
       display.clearScreen();
       break;
     }
