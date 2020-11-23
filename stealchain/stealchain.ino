@@ -24,6 +24,7 @@
 TinyScreen display = TinyScreen(TinyScreenDefault); //Create the TinyScreen object
 int option = 0;
 int eatwhere_setup = 0;
+int brightness = 10;
 
 void setup()
 {
@@ -31,7 +32,7 @@ void setup()
   display.begin();//Initializes TinyScreen board
   display.setFlip(1);                         //Flips the watch display
   display.on();                               //Turns TinyScreen display on
-  display.setBrightness(10);                  //Set display brightness 0 - 15
+  display.setBrightness(brightness);          //Set display brightness 0 - 15
   
   // Set the time and date. Change this to your current date and time.
   setTime(15,15,55,21,11,2020);    //values in the order hr,min,sec,day,month,year
@@ -99,11 +100,20 @@ void buttonLoop() {
     display.println("Random");
 
   }
-  display.setCursor(63, 0);
+  display.setCursor(43, 0);
   if (display.getButtons(TSButtonUpperRight)) {
-    display.println("       ok");
+    if (brightness < 15)
+    {
+      brightness++;
+      display.setBrightness(brightness);
+    }
+    else if (brightness == 15)
+    {
+      brightness = 0;
+      display.setBrightness(brightness);
+    }
   } else {
-    display.println("Watch");
+    display.println("Brightness");
   }
   display.setCursor(65, 45);
   if (display.getButtons(TSButtonLowerRight)) {
