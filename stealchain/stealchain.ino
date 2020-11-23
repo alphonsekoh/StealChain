@@ -26,24 +26,6 @@ TinyScreen display = TinyScreen(TinyScreenDefault); //Create the TinyScreen obje
 int option = 0;
 int eatwhere_setup = 0;
 int brightness = 10;
-int hours = 0;
-int minutes = 0;
-int seconds = 0;
-
-uint8_t defaultFontColor = TS_8b_White;
-uint8_t defaultFontBG = TS_8b_Black;
-uint8_t inactiveFontColor = TS_8b_Gray;
-uint8_t inactiveFontBG = TS_8b_Black;
-const FONT_INFO &clockFont = liberationSansNarrow_22ptFontInfo;
-uint8_t timeY = 20;
-
-bool isPaused = false;
-    bool isInSettings = false;
-    bool timeIsZero = false;
-    bool hasStarted = false;
-
-    bool userHasNotLeftMyApp = false;
-
 
 void setup()
 {
