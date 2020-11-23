@@ -52,17 +52,15 @@ void setup()
   display.setFlip(1);                         //Flips the watch display
   display.on();                               //Turns TinyScreen display on
   display.setBrightness(brightness);          //Set display brightness 0 - 15
-  //SerialMonitorInterface.begin(9600);
+  SerialMonitorInterface.begin(9600);
   // Set the time and date. Change this to your current date and time.
   setTime(15,15,55,21,11,2020);    //values in the order hr,min,sec,day,month,year
-  BLEsetup();
  
 }
  
 void loop()
 {
-  
-  TX_BLE();
+
   readInput(); //Sets the font size & color of the buttons and also call the buttonLoop function
   switch(option)
   {

@@ -19,6 +19,8 @@
 
     bool userHasNotLeftMyApp = true;
 
+
+
 int countdown()
 {
     display.setFont(liberationSans_8ptFontInfo);
@@ -26,22 +28,27 @@ int countdown()
     display.clearScreen();
 //    display.setCursor(5, 25);
 
+//    display.clearWindow(0, 52, 96, 12);
     displayDefaultMenu();
 
-    while (userHasNotLeftMyApp)
+    while (!display.getButtons(TSButtonLowerLeft))
     {
         if (display.getButtons(TSButtonLowerRight) && !hasStarted && (seconds > 0 || minutes > 0 || hours > 0))
         {
             //Timer has been set and user started it
+            delay(300);
             updateTimeDisplay();
         }
         else if (display.getButtons(TSButtonLowerRight) && isPaused && hasStarted)
         {
             //Continue button is triggered
-            delay(200);
+            delay(300);
             display.clearWindow(0, 48, 64, 11);
             display.setCursor(56, 48);
             display.print("Pause >");
+
+            display.setCursor(0, 50);
+            display.print("< Home");
             updateTimeDisplay();
         }
         else if (display.getButtons(TSButtonUpperRight))
@@ -70,7 +77,7 @@ int countdown()
             if (seconds < 1 && minutes < 1 && hours < 1)
             {
                 //Dont show any pause/continue button.
-                display.clearWindow(0, 48, 64, 11);
+                display.clearWindow(40, 48, 24, 11);
             }
             else
             {
@@ -86,6 +93,7 @@ int countdown()
             userHasNotLeftMyApp = false;
         }
     }
+    delay(300);
     return 0;
 }
 
@@ -95,11 +103,11 @@ int countdown()
 
         char displayX;
 
-        display.clearWindow(0, 48, 64, 11);
-        display.setCursor(0, 48);
-        display.setFont(liberationSans_8ptFontInfo);
-        display.fontColor(TS_8b_White, TS_8b_Black);
-        display.print("< Pause");
+        display.clearWindow(56, 48, 40, 16);
+        display.setCursor(56, 48);
+        display.setFont(liberationSansNarrow_8ptFontInfo);
+        display.fontColor(YELLOW, BLACK);
+        display.print("Pause >");
 
         isPaused = false;
 
@@ -137,6 +145,7 @@ int countdown()
 
             secondsToDisplay = internalSeconds;
 
+            display.fontColor(TS_8b_White, TS_8b_Black);
             display.setFont(clockFont);
             displayX = 0;
             display.setCursor(displayX, timeY);
@@ -176,11 +185,14 @@ int countdown()
                 seconds = secondsToDisplay;
                 isPaused = true;
                 display.clearWindow(0, 48, 64, 11);
-                display.setFont(liberationSans_8ptFontInfo);
-                display.fontColor(TS_8b_White, TS_8b_Black);
-                display.setCursor(60, 48);
+                display.setFont(liberationSansNarrow_8ptFontInfo);
+                display.fontColor(YELLOW, BLACK);
+                display.setCursor(45, 48);
                 display.print("Continue >");
-                delay(200);
+
+                display.setCursor(0, 50);
+                display.print("< Home");
+                delay(300);
                 break;
             }
             else if (display.getButtons(TSButtonUpperRight))
@@ -196,6 +208,7 @@ int countdown()
             else if (display.getButtons(TSButtonLowerLeft))
             {
               userHasNotLeftMyApp = false;
+              break;
             }
         }
 
@@ -227,11 +240,11 @@ int countdown()
 
             hasStarted = false;
 
-            int i = 0;
+            int i = 6;
             unsigned long pretime = 0;
             int shown = 0;
 
-            while (i < 5)
+            while (i > 0)
             {
                 if (millis() >= pretime + 1000)
                 {
@@ -267,17 +280,21 @@ int countdown()
         char displayX;
 
         display.clearWindow(0, 0, 96, 11);
-        display.setFont(liberationSans_8ptFontInfo);
-        display.fontColor(TS_8b_White, TS_8b_Black);
+        display.setFont(liberationSansNarrow_8ptFontInfo);
+        display.fontColor(YELLOW, BLACK);
         display.setCursor(0, 0);
         delay(200);
         display.print("< Next");
 
+        display.setFont(liberationSansNarrow_8ptFontInfo);
+        display.fontColor(YELLOW, BLACK);
         display.setCursor(90, 0);
         delay(200);
         display.print("^");
 
         display.setCursor(90, 48);
+        display.setFont(liberationSansNarrow_8ptFontInfo);
+        display.fontColor(YELLOW, BLACK);
         delay(200);
         display.print("v");
 
@@ -411,8 +428,8 @@ int countdown()
                 if (!saveWordsPrinted)
                 {
                     display.clearWindow(0, 0, 70, 11);
-                    display.setFont(liberationSans_8ptFontInfo);
-                    display.fontColor(TS_8b_White, TS_8b_Black);
+                    display.setFont(liberationSansNarrow_8ptFontInfo);
+                    display.fontColor(YELLOW, BLACK);
                     display.setCursor(0, 0);
                     display.print("< Save");
                     saveWordsPrinted = true;
@@ -477,14 +494,15 @@ int countdown()
             if (display.getButtons(TSButtonUpperLeft))
             {
                 //      delay(200);
+                display.clearWindow(0, 0, 96, 11);
                 display.clearWindow(0, 48, 96, 11);
                 time_now = millis();
-                displayMenu();
+                displayDefaultMenu();
                 isInSettings = false;
 
                 //Print the start button
-                display.setFont(liberationSans_8ptFontInfo);
-                display.fontColor(TS_8b_White, TS_8b_Black);
+                display.setFont(liberationSansNarrow_8ptFontInfo);
+                display.fontColor(YELLOW, BLACK);
                 display.setCursor(56, 48);
                 display.print("Start >");
                 break;
@@ -526,12 +544,12 @@ int countdown()
 
     void displayDefaultMenu()
     {
-        display.setFont(liberationSans_8ptFontInfo);
+        display.setFont(liberationSansNarrow_8ptFontInfo);
         display.fontColor(YELLOW, BLACK);
         display.setCursor(0, 0);
         display.print("< Reset");
-        display.setCursor(0, 55);
-        display.print("< Exit");
+        display.setCursor(0, 50);
+        display.print("< Home");
         display.setCursor(66, 0);
         display.print("Set >");
     }
