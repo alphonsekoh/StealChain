@@ -260,7 +260,7 @@ int countdown()
                     {
                         shown = 1;
                         display.drawRect(0, 0, 95, 63, 1, TS_8b_Red);
-                        display.setCursor(18, 20); //set the cursor to x, y position, where to start next print/draw instruction
+                        display.setCursor(16, 20); //set the cursor to x, y position, where to start next print/draw instruction
                         display.setFont(liberationSansNarrow_12ptFontInfo);
                         display.fontColor(TS_8b_Black, TS_8b_Red);
                         display.print("WAKE UP!!");
