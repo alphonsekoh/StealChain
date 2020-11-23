@@ -47,9 +47,12 @@ void Anti_TheftSetup()
 {
   //Start Bluetooth
   SerialMonitorInterface.begin(9600);
-  BLEsetup();
+
 
   //Display the UI for anti-theft
+
+  BLEsetup();  
+
   default_display();
 
   anti_theft();
