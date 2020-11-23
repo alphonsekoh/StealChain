@@ -13,7 +13,26 @@
 #include <Wire.h>
 #include <TinyScreen.h> //include TinyScreen library
 #include <TimeLib.h> //include the Arduino Time library
-#include <Countdown.h>
+#include <SPI.h>
+#include <STBLE.h>
+#include <stdio.h>
+#include "BMA250.h"
+
+
+/* For Anti theft alarm */
+#ifndef BLE_DEBUG
+#define BLE_DEBUG true
+#endif
+#if defined (ARDUINO_ARCH_AVR)
+#define SerialMonitorInterface Serial
+#elif defined(ARDUINO_ARCH_SAMD)
+#endif
+
+uint8_t ble_rx_buffer[21];
+uint8_t ble_rx_buffer_len = 0;
+uint8_t ble_connection_state = false;
+#define PIPE_UART_OVER_BTLE_UART_TX_TX 0
+#include <CountDown.h>
 
 // Make Serial Monitor compatible for all TinyCircuits processors
 #if defined(ARDUINO_ARCH_AVR)
@@ -34,7 +53,7 @@ void setup()
   display.setFlip(1);                         //Flips the watch display
   display.on();                               //Turns TinyScreen display on
   display.setBrightness(brightness);          //Set display brightness 0 - 15
-  
+  SerialMonitorInterface.begin(9600);
   // Set the time and date. Change this to your current date and time.
   setTime(15,15,55,21,11,2020);    //values in the order hr,min,sec,day,month,year
  
@@ -42,7 +61,6 @@ void setup()
  
 void loop()
 {
-  
 
   readInput(); //Sets the font size & color of the buttons and also call the buttonLoop function
   switch(option)
@@ -70,7 +88,7 @@ void loop()
     case 1:
     {
       display.clearScreen();
-      option = countdown();
+//      option = countdown();
       display.clearScreen();
       break;
     }
@@ -78,6 +96,13 @@ void loop()
     {
       display.clearScreen();
       option = eatWhere();
+      display.clearScreen();
+      break;
+    }
+    case 3:
+    {
+      display.clearScreen();
+      option = anti_theft_alarm();
       display.clearScreen();
       break;
     }
@@ -127,7 +152,9 @@ void buttonLoop() {
   }
   display.setCursor(65, 45);
   if (display.getButtons(TSButtonLowerRight)) {
-    display.println("      ok");
+//    display.println("      ok");
+      delay(300);
+      option = 3;
   } else {
     display.println("Alarm");
   }
