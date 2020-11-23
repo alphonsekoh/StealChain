@@ -227,7 +227,6 @@ void backButtonLoop()
 void centerText(char *txt, int ypos)
 {
   int width=display.getPrintWidth(txt);
-  SerialMonitorInterface.println(width);
   if(width <= 96)
   {
     display.setCursor(48-(width/2), ypos);

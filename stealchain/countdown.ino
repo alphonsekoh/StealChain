@@ -260,10 +260,10 @@ int countdown()
                     {
                         shown = 1;
                         display.drawRect(0, 0, 95, 63, 1, TS_8b_Red);
-                        display.setCursor(25, 20); //set the cursor to x, y position, where to start next print/draw instruction
+                        display.setCursor(18, 20); //set the cursor to x, y position, where to start next print/draw instruction
                         display.setFont(liberationSansNarrow_12ptFontInfo);
                         display.fontColor(TS_8b_Black, TS_8b_Red);
-                        display.print("ALERT!!");
+                        display.print("WAKE UP!!");
                     }
                     i--;
                 }
@@ -379,7 +379,6 @@ int countdown()
                         minutes++;
                         if (minutes > 59)
                         {
-                            hours++;
                             minutes -= 60;
                         }
                         delay(200);
@@ -390,6 +389,10 @@ int countdown()
                         if (minutes > 0)
                         {
                             minutes--;
+                        }
+                        if (minutes == 0)
+                        {
+                          minutes = 59;
                         }
                         delay(200);
                         break;
@@ -427,7 +430,7 @@ int countdown()
 
                 if (!saveWordsPrinted)
                 {
-                    display.clearWindow(0, 0, 70, 11);
+                    display.clearWindow(0, 0, 60, 11);
                     display.setFont(liberationSansNarrow_8ptFontInfo);
                     display.fontColor(YELLOW, BLACK);
                     display.setCursor(0, 0);
@@ -448,7 +451,6 @@ int countdown()
                     seconds++;
                     if (seconds > 59)
                     {
-                        minutes++;
                         seconds -= 60;
                     }
                     delay(200);
@@ -459,6 +461,10 @@ int countdown()
                     if (seconds > 0)
                     {
                         seconds--;
+                    }
+                    if(seconds == 0)
+                    {
+                      seconds = 59;
                     }
                     delay(200);
                     break;

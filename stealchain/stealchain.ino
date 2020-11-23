@@ -54,7 +54,7 @@ void setup()
   display.setBrightness(brightness);          //Set display brightness 0 - 15
   SerialMonitorInterface.begin(9600);
   // Set the time and date. Change this to your current date and time.
-  setTime(15,15,55,21,11,2020);    //values in the order hr,min,sec,day,month,year
+  setTime(15,15,55,23,11,2020);    //values in the order hr,min,sec,day,month,year
  
 }
  
@@ -119,7 +119,6 @@ void buttonLoop() {
   display.setCursor(0, 0); //Position of upper left button
   
   if (display.getButtons(TSButtonUpperLeft)) { //Test if a specific button is pressed, getButtons(TSRButtonLowerLeft|TSRButtonLowerRight) to test multiple buttons
-    display.println("ok       "); //Spaces are used to cover the original displayed text
     delay(300);
     option = 1;
   } else {
@@ -151,7 +150,6 @@ void buttonLoop() {
   }
   display.setCursor(65, 45);
   if (display.getButtons(TSButtonLowerRight)) {
-//    display.println("      ok");
       delay(300);
       option = 3;
   } else {
