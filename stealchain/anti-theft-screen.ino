@@ -169,7 +169,7 @@ void default_display()
   //Default 
   display.setFont(liberationSansNarrow_8ptFontInfo);
   display.setCursor(0,0);
-  display.fontColor(TS_8b_White,TS_8b_Black);
+  display.fontColor(YELLOW,BLACK);
   display.print("< ON");
 
   display.fontColor(TS_8b_White,TS_8b_Black);
@@ -190,7 +190,7 @@ void ON(char* anti_theft){
     readOriginal();
     display.setFont(liberationSansNarrow_8ptFontInfo);
     display.setCursor(0,0);
-    display.fontColor(TS_8b_White,TS_8b_Black);
+    display.fontColor(YELLOW,BLACK);
     display.print("< OFF");
     display.fontColor(TS_8b_White,TS_8b_Black);
     display.setFont(liberationSansNarrow_12ptFontInfo);
@@ -214,7 +214,7 @@ int goBack = 0;
 int back(){
   display.setFont(liberationSansNarrow_8ptFontInfo);
   display.setCursor(0,48);
-  display.fontColor(TS_8b_White,TS_8b_Black);
+  display.fontColor(YELLOW,BLACK);
   display.print("< Back");
   goBack = 1;
   return goBack;
