@@ -28,24 +28,37 @@ int byphone = 0;
 int activated = 0;
 
 
+//
+//void setup() {
+//  // put your setup code here, to run once:
+//  Wire.begin();
+//  display.begin();                            //Initializes TinyScreen board
+//  display.setFlip(1);                         
+//  display.on();                               //Turns TinyScreen display on
+//  display.setBrightness(10);
+//
+//  SerialMonitorInterface.begin(9600);
+//  BLEsetup();  
+//  default_display();
+//  
+//}
 
-void setup() {
-  // put your setup code here, to run once:
-  Wire.begin();
-  display.begin();                            //Initializes TinyScreen board
-  display.setFlip(1);                         
-  display.on();                               //Turns TinyScreen display on
-  display.setBrightness(10);
-
+void Anti_TheftSetup()
+{
+  //Start Bluetooth
   SerialMonitorInterface.begin(9600);
-  BLEsetup();  
-  while (!SerialMonitorInterface);
+  BLEsetup();
+
+  //Display the UI for anti-theft
   default_display();
-  
+
+  anti_theft();
 }
 
-void loop() {
-
+// Function for anti-theft
+void anti_theft()
+{
+  //Receive value from the phone via bluetooth
   aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
   if (ble_rx_buffer_len) {//Check if data is available
     SerialMonitorInterface.print(ble_rx_buffer_len);
@@ -54,12 +67,16 @@ void loop() {
     SerialMonitorInterface.println((char*)ble_rx_buffer);
     ble_rx_buffer_len = 0;//clear afer reading
   }  
-   
+
+  //When the status is ON
   if(blink)
   {
+     //Read the motion through Accelerometer
      readUpdated();
      diffInReading();
      activated = willItBlink();
+
+     //Start the Blinking for Alert
      if (activated)
      {
         char* alert = "ALERT";
@@ -72,13 +89,15 @@ void loop() {
           sendLength++;
         }
         sendBuffer[sendLength] = '\0';
+
+        //Send ALERT message to the phone via bluetooth
         lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, sendLength); 
         //byphone = 0;
         
      }
-     //blinkAlert();
   }
 
+  // Compare the value get from the bluetooth whether is "ON" or "OFF"
   if (strcmp(value, "ON") == 0 && byphone == 0)
   {
         delay(300);
@@ -101,7 +120,7 @@ void loop() {
         value = "";
   }
   
-  // put your main code here, to run repeatedly:
+  // Button Pressed
   switch (display.getButtons())
   {
     case TSButtonUpperLeft:
@@ -112,10 +131,10 @@ void loop() {
         delay(300);
         display.clearScreen();
         anti_theft = "ON";
-        SerialMonitorInterface.println(anti_theft);
         ON(anti_theft);
         blink = 1;
         byphone = 1;
+        
       }else
       {
         delay(300);
@@ -164,9 +183,131 @@ void loop() {
        default_display();
        break;
   }
-
-
 }
+
+//void loop() {
+//
+//  aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
+//  if (ble_rx_buffer_len) {//Check if data is available
+//    SerialMonitorInterface.print(ble_rx_buffer_len);
+//    SerialMonitorInterface.print(" : ");
+//    value = (char*)ble_rx_buffer;
+//    SerialMonitorInterface.println((char*)ble_rx_buffer);
+//    ble_rx_buffer_len = 0;//clear afer reading
+//  }  
+//   
+//  if(blink)
+//  {
+//     readUpdated();
+//     diffInReading();
+//     activated = willItBlink();
+//     if (activated)
+//     {
+//        char* alert = "ALERT";
+//        uint8_t sendBuffer[21];
+//        uint8_t sendLength = 0;
+//        for (int i = 0; i < strlen(alert); i++)
+//        {
+//          SerialMonitorInterface.println(sendBuffer[i]);
+//          sendBuffer[i] = alert[i];
+//          sendLength++;
+//        }
+//        sendBuffer[sendLength] = '\0';
+//        lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, sendLength); 
+//        //byphone = 0;
+//        
+//     }
+//     //blinkAlert();
+//  }
+//
+//  if (strcmp(value, "ON") == 0 && byphone == 0)
+//  {
+//        delay(300);
+//        anti_theft = "ON";
+//        ON(value);
+//        blink = 1;
+//        byphone = 1;
+//        value = "";
+//        
+//  }else if(strcmp(value, "OFF") == 0 && byphone == 1)
+//  {
+//        SerialMonitorInterface.println(anti_theft);
+//        delay(300);
+//        display.clearScreen();
+//        anti_theft = "OFF";
+//        OFF(value);
+//        blink = 0;
+//        stopBlink();
+//        byphone = 0;
+//        value = "";
+//  }
+//  
+//  // put your main code here, to run repeatedly:
+//  switch (display.getButtons())
+//  {
+//    case TSButtonUpperLeft:
+//      
+//      if (strcmp(anti_theft, "OFF") == 0)
+//      {
+//         
+//        delay(300);
+//        display.clearScreen();
+//        anti_theft = "ON";
+//        SerialMonitorInterface.println(anti_theft);
+//        ON(anti_theft);
+//        blink = 1;
+//        byphone = 1;
+//      }else
+//      {
+//        delay(300);
+//        display.clearScreen();
+//        anti_theft = "OFF";
+//        OFF(anti_theft);
+//        blink = 0;
+//        stopBlink();
+//        byphone = 0;
+//      }
+//      break;
+//      
+//    case TSButtonLowerLeft:
+//      if (blink)
+//      {
+//        delay(300);
+//        display.clearScreen();
+//        blink = 0;
+//        stopBlink();
+//        byphone = 0;
+//        anti_theft = "OFF";
+//        default_display();
+//      }else
+//      {
+//        back();
+//      }
+//      break;
+//      
+//    case TSButtonLowerRight:
+//       delay(300);
+//       display.clearScreen();
+//       blink = 0;
+//       stopBlink();
+//       byphone = 0;
+//       anti_theft = "OFF";
+//       default_display();
+//       break;
+//       
+//    case TSButtonUpperRight:
+//       delay(300);
+//       display.clearScreen();
+//       blink = 0;
+//       stopBlink();
+//       byphone = 0;
+//       anti_theft = "OFF";
+//       default_display();
+//       break;
+//  }
+//
+//
+//}
 
 void default_display()
 {
@@ -214,10 +355,12 @@ void OFF(char* anti_theft){
 }
 
 
-
-void back(){
+int goBack = 0;
+int back(){
   display.setFont(liberationSansNarrow_8ptFontInfo);
   display.setCursor(0,48);
   display.fontColor(TS_8b_White,TS_8b_Black);
   display.print("< Back");
+  goBack = 1;
+  return goBack;
 }
