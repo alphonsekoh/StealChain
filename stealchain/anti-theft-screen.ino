@@ -5,6 +5,7 @@ int byphone = 0;
 int activated = 0;
 
 
+//Combined overall function for anti-theft 
 int anti_theft_alarm()
 {
   anti_theft_setup();
@@ -17,6 +18,7 @@ int anti_theft_alarm()
   return 0;
 }
 
+//Anti theft set up
 void anti_theft_setup()
 {
   //Start Bluetooth
@@ -26,19 +28,26 @@ void anti_theft_setup()
 }
 
 
+//Bluetooth to receive infomation from phone device
 void TX_BLE(){
-  aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
-  if (ble_rx_buffer_len) {//Check if data is available
+  //Process any ACI commands or events from the main BLE handle
+   aci_loop();
+   
+  //Check if data is available
+  if (ble_rx_buffer_len) {
     SerialMonitorInterface.print(ble_rx_buffer_len);
     SerialMonitorInterface.print(" : ");
     value = (char*)ble_rx_buffer;
     SerialMonitorInterface.println(value);
     SerialMonitorInterface.println((char*)ble_rx_buffer);
-    ble_rx_buffer_len = 0;//clear afer reading
+    //clear afer reading
+    ble_rx_buffer_len = 0;
   }  
 }
+
+//Send information to phone via bluetooth
 void RX_BLE(){
-  char* alert = "ALERT";
+        char* alert = "ALERT";
         uint8_t sendBuffer[21];
         uint8_t sendLength = 0;
         for (int i = 0; i < strlen(alert); i++)
@@ -51,9 +60,9 @@ void RX_BLE(){
 
         //Send ALERT message to the phone via bluetooth
         lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, (uint8_t*)sendBuffer, sendLength); 
-        //byphone = 0;
   
 }
+
 // Function for anti-theft
 void anti_theft_loop()
 {
@@ -98,7 +107,7 @@ void anti_theft_loop()
         value = "";
   }
   
-  // Button Pressed
+  //Check which Button was Pressed
   switch (display.getButtons())
   {
     case TSButtonUpperLeft:
@@ -163,10 +172,10 @@ void anti_theft_loop()
   }
 }
 
-
+//Default display
 void default_display()
 {
-  //Default 
+  
   display.setFont(liberationSansNarrow_8ptFontInfo);
   display.setCursor(0,0);
   display.fontColor(YELLOW,BLACK);
@@ -185,6 +194,7 @@ void default_display()
   back();
 }
 
+//ON display
 void ON(char* anti_theft){
 
     readOriginal();
@@ -205,11 +215,13 @@ void ON(char* anti_theft){
   
 }
 
+//OFF display
 void OFF(char* anti_theft){
     default_display();
 }
 
 
+//Back display
 int goBack = 0;
 int back(){
   display.setFont(liberationSansNarrow_8ptFontInfo);
