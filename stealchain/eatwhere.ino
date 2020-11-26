@@ -1,12 +1,12 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <TinyScreen.h>
-
+// Define constant variables
 #define STALL_YPOS 30
 #define PLACE_YPOS 25
 #define EAT_WHERE "Where to eat?"
 #define EAT_WHAT "What to eat?"
-
+// Create array for place and stalls
 char *canteens[5] = {"North Canteen", "South Canteen", "Koufu", "Foogle Hub", "Food Connect"};
 char *north_canteen[5] = {"Western Cuisine", "Pasta", "Economical Rice", "Thai Cuisine", "Indo Delight"};
 char *south_canteen[8] = {"Muslim Food", "Vegetarian", "Chicken Rice", "Indian Food", "Japanese Food", "Ban Mian", "Economy Rice", "Western Food"};
@@ -19,8 +19,14 @@ int is_back = 1;
 char *chosen_place;
 long randIndex;
 
+/**
+ *
+ * Eat where program starting location
+ *
+*/
 int eatWhere()
 {
+  // Setup the program
   eatWhereSetup();
 
   // Keep looping until lower left button is pressed
@@ -29,7 +35,9 @@ int eatWhere()
     eatWhereLoop();
   }
   
-  delay(300);
+  delay(300); 
+  // Check if place has been chosen 
+  // if not, display eat where randomniser
   if(is_place_chosen)
   {
     display.clearScreen();
@@ -43,6 +51,12 @@ int eatWhere()
   }
 }
 
+
+/**
+ *
+ * Set up display screen for eat where feature
+ *
+*/
 void eatWhereSetup() {
   display.clearScreen();
   display.setFont(liberationSans_10ptFontInfo); // Set font size
@@ -53,6 +67,12 @@ void eatWhereSetup() {
 }
 
 
+/**
+ *
+ * Decide whether to display where to eat randomniser
+ * or what to eat randomniser
+ *
+*/
 void eatWhereLoop() 
 {
   if (!is_place_chosen)
@@ -61,16 +81,18 @@ void eatWhereLoop()
   }
   else
   { 
-    display.setFont(liberationSansNarrow_8ptFontInfo);
-    display.setCursor(0, 0);
-    display.fontColor(YELLOW, BLACK);
-    display.print("< Choose Stall");
+    display.setFont(liberationSansNarrow_8ptFontInfo);  // Set font size
+    display.setCursor(0, 0); // Set cursor to top left corner
+    display.fontColor(YELLOW, BLACK); // Set font colour to yellow
+    display.print("< Choose Stall"); // Display menu text
+    // Check if back button is pressed
     while (!display.getButtons(TSButtonLowerLeft))
     {
       chooseStall();
     }
   }
 }
+
 
 /**
  * 
@@ -81,33 +103,35 @@ void eatWhereLoop()
 */
 void choosePlace()
 {
+  // Check if choose button is pressed
   if (display.getButtons(TSButtonUpperLeft)) 
   {
-    display.fontColor(WHITE,BLACK);
-    display.setFont(liberationSans_10ptFontInfo);
-    displayRandom(5, canteens, PLACE_YPOS);
+    display.fontColor(WHITE,BLACK);  // Set font colour to white
+    display.setFont(liberationSans_10ptFontInfo); // Set font size
+    displayRandom(5, canteens, PLACE_YPOS); // Display roulette
     delay(200);
-    randIndex = random(5);
-    chosen_place = canteens[(int)randIndex];
-    display.fontColor(GREEN, BLACK);
-    centerText(chosen_place, PLACE_YPOS);
-    drawBorder();
+    randIndex = random(5); // Get a random number from 0-5
+    chosen_place = canteens[(int)randIndex]; // Select a random place
+    display.fontColor(GREEN, BLACK); // Set font colour to green
+    centerText(chosen_place, PLACE_YPOS); // Display chosen place in center of screen
+    drawBorder(); // Display border animation
     delay(600);
-    display.clearWindow(0, PLACE_YPOS, 96, 20);
-    centerText(chosen_place, 15);
+    display.clearWindow(0, PLACE_YPOS, 96, 20);  // Clear portion of screen
+    centerText(chosen_place, 15);  // Display chosen place
     
-    display.fontColor(WHITE,BLACK);
-    centerText(EAT_WHAT, 30);
+    display.fontColor(WHITE,BLACK); // Set font colour to white
+    centerText(EAT_WHAT, 30); // Center eat what text
     
-    is_place_chosen = 1;
-    display.clearWindow(0, 0, 96, 11);
-    display.clearWindow(0,52, 96, 12);
-    display.fontColor(YELLOW, BLACK);
-    display.setFont(liberationSans_8ptFontInfo);
-    display.setCursor(0, 48);
-    display.print("< Back");
+    is_place_chosen = 1; // Set flag to 1
+    display.clearWindow(0, 0, 96, 11); // Clear top menu text
+    display.clearWindow(0,52, 96, 12); // Clear button menu text
+    display.fontColor(YELLOW, BLACK);  // Set font colour to yellow
+    display.setFont(liberationSans_8ptFontInfo);  // Set font size
+    display.setCursor(0, 48); // Set cursor to botton left corner
+    display.print("< Back"); // Display back button
   }
 }
+
 
 /**
  * 
@@ -119,9 +143,11 @@ void chooseStall()
 {
   if (display.getButtons(TSButtonUpperLeft)) 
   {
-    display.fontColor(WHITE,BLACK);
-    display.setFont(liberationSans_10ptFontInfo);
-    display.clearWindow(0, STALL_YPOS, 96, 15);
+    display.fontColor(WHITE,BLACK); // Set font colour to white
+    display.setFont(liberationSans_10ptFontInfo); // Set font size
+    display.clearWindow(0, STALL_YPOS, 96, 15); // Clear portion of screen
+    // Determine which canteen is chosen, 
+    // randomly select a stall based on chosen canteen
     switch ((int)randIndex)
     {
       case 0:
@@ -164,6 +190,7 @@ void chooseStall()
   }
 }
 
+
 /**
  * 
  * Display default menu items
@@ -179,6 +206,7 @@ void displayMenu()
   display.setCursor(0, 48);
   display.print("< Home");
 }
+
 
 /**
  * 
@@ -199,6 +227,7 @@ void displayRandom(int num, char ** list, int height)
   display.clearWindow(0, height, 96, 15);
 }
 
+
 /**
  * 
  * Check if lower left button is pressed
@@ -217,6 +246,7 @@ void backButtonLoop()
     is_place_chosen = 0;
   }
 }
+
 
 /**
  * 
@@ -237,6 +267,7 @@ void centerText(char *txt, int ypos)
   }
   display.print(txt);
 }
+
 
 /**
  * 
