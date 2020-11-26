@@ -1,3 +1,5 @@
+#include <Time.h>
+
 //Colors available to use
 #define BLACK           0x00
 #define BLUE            0xE0
@@ -9,16 +11,14 @@
 #define ALPHA           0xFE
 #define BROWN           0x32
 
-
 #include <Wire.h>
 #include <TinyScreen.h> //include TinyScreen library
 #include <TimeLib.h> //include the Arduino Time library
 #include <SPI.h>
 #include <STBLE.h>
 #include <stdio.h>
+#include <DS1307RTC.h>
 #include "BMA250.h"
-
-
 /* For Anti theft alarm */
 #ifndef BLE_DEBUG
 #define BLE_DEBUG true
@@ -52,16 +52,15 @@ void setup()
   display.setFlip(1);                         //Flips the watch display
   display.on();                               //Turns TinyScreen display on
   display.setBrightness(brightness);          //Set display brightness 0 - 15
-  //SerialMonitorInterface.begin(9600);
+  SerialMonitorInterface.begin(9600);
   // Set the time and date. Change this to your current date and time.
-  setTime(15,15,55,21,11,2020);    //values in the order hr,min,sec,day,month,year
+  setTime(15,29,0, 25, 11, 2020);    //values in the order hr,min,sec,day,month,year
   BLEsetup();
  
 }
  
 void loop()
 {
-  
   TX_BLE();
   readInput(); //Sets the font size & color of the buttons and also call the buttonLoop function
   switch(option)
@@ -69,11 +68,11 @@ void loop()
     case 0:
     {
       //Sets font size & color for the time by overriding the declarations above
-      display.setFont(liberationSansNarrow_14ptFontInfo);   //Set the font type for time
+      display.setFont(liberationSans_14ptFontInfo);   //Set the font type for time
       display.fontColor(WHITE,BLACK);
      
       // display time in HH/MM/SS 24-hours format
-      display.setCursor(22,20); //Set the position of the time displayed
+      display.setCursor(18,20); //Set the position of the time displayed
       if(hour()<10) display.print(0); //print a leading 0 if hour value is less than 0
       display.print(hour()); //hour() is a built in function to show the hour which was pre-set in setTime()
       display.print(":");
@@ -110,6 +109,30 @@ void loop()
   }
   
 }
+
+
+void digitalClockDisplay(){
+  // digital clock display of the time
+  Serial.print(hour());
+  printDigits(minute());
+  printDigits(second());
+  Serial.print(" ");
+  Serial.print(day());
+  Serial.print(" ");
+  Serial.print(month());
+  Serial.print(" ");
+  Serial.print(year()); 
+  Serial.println(); 
+}
+
+void printDigits(int digits){
+  // utility function for digital clock display: prints preceding colon and leading 0
+  Serial.print(":");
+  if(digits < 10)
+    Serial.print('0');
+  Serial.print(digits);
+}
+
 
 void readInput() {
   display.fontColor(YELLOW,BLACK); //Set font Color of buttons
