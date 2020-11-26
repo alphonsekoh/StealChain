@@ -20,15 +20,13 @@
     bool userHasNotLeftMyApp = true;
 
 
-
+//The primary function of this sub module. This function will return when the user leaves the timer app.
 int countdown()
 {
     display.setFont(liberationSans_8ptFontInfo);
     display.fontColor(YELLOW, TS_8b_Black);
     display.clearScreen();
-//    display.setCursor(5, 25);
-
-//    display.clearWindow(0, 52, 96, 12);
+    
     displayDefaultMenu();
 
     while (!display.getButtons(TSButtonLowerLeft))
@@ -79,14 +77,6 @@ int countdown()
                 //Dont show any pause/continue button.
                 display.clearWindow(40, 48, 24, 11);
             }
-            else
-            {
-                //      display.clearWindow(0, 48, 64, 11);
-                //      display.setFont(liberationSans_8ptFontInfo);
-                //      display.fontColor(TS_8b_White, TS_8b_Black);
-                //      display.setCursor(0, 48);
-                //      display.print("< Start");
-            }
         }
         else if (display.getButtons(TSButtonLowerLeft))
         {
@@ -97,6 +87,7 @@ int countdown()
     return 0;
 }
 
+//This function calculates the time remaining till the timer ends and prints the timer on the screen.
     void updateTimeDisplay()
     {
         totalSeconds = hours * 3600 + minutes * 60 + seconds;
@@ -121,7 +112,6 @@ int countdown()
             hasStarted = true;
             if (millis() >= time_now + timeInterval)
             {
-                //      time_now += timeInterval;
                 time_now = millis();
 
                 totalSeconds--;
@@ -272,6 +262,7 @@ int countdown()
         }
     }
 
+// When this function is called, the user will be able to adjust the values of the timer such as the hours, minutes and seconds left.
     void adjustTimer()
     {
         //Remove pause/continue button from Display
@@ -517,6 +508,7 @@ int countdown()
         }
     }
 
+// When this function is called, the time remaining is retrieved and printed onto the screen.
     void displayClockAsIs()
     {
         char displayX;
@@ -548,6 +540,7 @@ int countdown()
         display.print(seconds);
     }
 
+// When this function is called, the base navigation buttons are displayed onto the screen.
     void displayDefaultMenu()
     {
         display.setFont(liberationSansNarrow_8ptFontInfo);
