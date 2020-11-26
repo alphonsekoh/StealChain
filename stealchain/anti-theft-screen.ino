@@ -5,7 +5,7 @@ int byphone = 0;
 int activated = 0;
 
 
-//Combined overall function for anti-theft 
+/*Main function of the anti-theft alarm, see subsequent functions*/
 int anti_theft_alarm()
 {
   anti_theft_setup();
@@ -18,22 +18,22 @@ int anti_theft_alarm()
   return 0;
 }
 
-//Anti theft set up
+/* Determine what to Setup for the Anti-theft alarm function*/
 void anti_theft_setup()
 {
-  //Start Bluetooth
+  
   SerialMonitorInterface.begin(9600);
 
   default_display();
 }
 
 
-//Bluetooth to receive infomation from phone device
+/*Bluetooth Transceiver Function for the Anti-Theft Alarm*/
 void TX_BLE(){
   //Process any ACI commands or events from the main BLE handle
    aci_loop();
    
-  //Check if data is available
+  // Check if data is available
   if (ble_rx_buffer_len) {
     SerialMonitorInterface.print(ble_rx_buffer_len);
     SerialMonitorInterface.print(" : ");
@@ -45,7 +45,7 @@ void TX_BLE(){
   }  
 }
 
-//Send information to phone via bluetooth
+/*Bluetooth Receiver Function for the Anti-Theft Alarm*/
 void RX_BLE(){
         char* alert = "ALERT";
         uint8_t sendBuffer[21];
@@ -63,11 +63,11 @@ void RX_BLE(){
   
 }
 
-// Function for anti-theft
+/*Main Function for integration to stealchain in loop()*/
 void anti_theft_loop()
 {
-  TX_BLE();
-
+  
+  TX_BLE(); //Start Transceiver Bluetooth 
   //When the status is ON
   if(blink)
   {
@@ -79,7 +79,7 @@ void anti_theft_loop()
      //Start the Blinking for Alert
      if (activated)
      {
-      RX_BLE();
+      RX_BLE(); //Reveive Bluetooth values 
         
      }
   }
